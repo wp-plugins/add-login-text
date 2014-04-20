@@ -65,11 +65,17 @@ Add this to your functions.php:
 
 == Changelog ==
 
+= 0.0.2 =
+- fix for wp_kses
+
 = 0.0.1 =
 - created
 - verified compatibility with WP 3.9
 
 == Upgrade Notice ==
+
+= 0.0.2 =
+- fix for wp_kses
 
 = 0.0.1 =
 created, verified compatibility with WP 3.9
