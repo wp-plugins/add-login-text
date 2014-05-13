@@ -1,0 +1,118 @@
+# Copyright (C) 2014 Add Login Text
+# This file is distributed under the same license as the Add Login Text package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Add Login Text 0.0.3\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/add-login-text\n"
+"POT-Creation-Date: 2014-04-22 02:37:54+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-04-23 09:46-0500\n"
+"Last-Translator: \n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: Poedit 1.6.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en\n"
+
+#: add-login-text.php:30
+msgid "Do not access this file directly."
+msgstr ""
+
+#: add-login-text.php:68
+msgid "You do not have sufficient permission to access this page"
+msgstr ""
+
+#: add-login-text.php:72
+msgid " by "
+msgstr ""
+
+#: add-login-text.php:73
+msgid "You are running plugin version"
+msgstr ""
+
+#: add-login-text.php:78
+msgid "Plugin Settings"
+msgstr ""
+
+#: add-login-text.php:82 add-login-text.php:85
+msgid "Is plugin enabled? Uncheck this to turn it off temporarily."
+msgstr ""
+
+#: add-login-text.php:82
+msgid "Plugin enabled?"
+msgstr ""
+
+#: add-login-text.php:87
+msgid "Enter custom login text"
+msgstr ""
+
+#: add-login-text.php:90
+msgid ""
+"Type the custom text you want to display on the admin login screen. HTML "
+"allowed."
+msgstr ""
+
+#: add-login-text.php:98 add-login-text.php:184
+msgid "Documentation"
+msgstr ""
+
+#: add-login-text.php:99 add-login-text.php:185
+msgid "FAQ"
+msgstr ""
+
+#: add-login-text.php:100
+msgid "If you like this plugin, please "
+msgstr ""
+
+#: add-login-text.php:102
+msgid "rate it on WordPress.org"
+msgstr ""
+
+#: add-login-text.php:104
+msgid "and click the "
+msgstr ""
+
+#: add-login-text.php:106
+msgid "Works"
+msgstr ""
+
+#: add-login-text.php:108
+msgid "button. For support please visit the "
+msgstr ""
+
+#: add-login-text.php:110
+msgid "forums"
+msgstr ""
+
+#: add-login-text.php:148
+msgid "is currently disabled."
+msgstr ""
+
+#: add-login-text.php:171
+msgid "Settings"
+msgstr ""
+
+#: add-login-text.php:183
+msgid "Support"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Add Login Text"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.jimmyscode.com/wordpress/add-login-text/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Add text to the WordPress login screen."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Jimmy Pe&ntilde;a"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://www.jimmyscode.com/"
+msgstr ""

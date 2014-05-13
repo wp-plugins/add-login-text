@@ -3,7 +3,7 @@
 Plugin Name: Add Login Text
 Plugin URI: http://www.jimmyscode.com/wordpress/add-login-text/
 Description: Add text to the WordPress login screen.
-Version: 0.0.3
+Version: 0.0.4
 Author: Jimmy Pe&ntilde;a
 Author URI: http://www.jimmyscode.com/
 License: GPLv2 or later
@@ -11,7 +11,7 @@ License: GPLv2 or later
 
 	define('ALT_PLUGIN_NAME', 'Add Login Text');
 	// plugin constants
-	define('ALT_VERSION', '0.0.3');
+	define('ALT_VERSION', '0.0.4');
 	define('ALT_SLUG', 'add-login-text');
 	define('ALT_LOCAL', 'altlt');
 	define('ALT_OPTION', 'altlt');
@@ -27,92 +27,77 @@ License: GPLv2 or later
 	
 	// oh no you don't
 	if (!defined('ABSPATH')) {
-		wp_die(__('Do not access this file directly.', ALT_LOCAL));
+		wp_die(__('Do not access this file directly.', alt_get_local()));
 	}
 
-	// delete option when plugin is uninstalled
-	register_uninstall_hook(__FILE__, 'uninstall_ALT_plugin');
-	function uninstall_ALT_plugin() {
-		delete_option(ALT_OPTION);
-	}
 	// localization to allow for translations
 	add_action('init', 'ALT_translation_file');
 	function ALT_translation_file() {
-		$plugin_path = plugin_basename(dirname(__FILE__) . '/translations');
-		load_plugin_textdomain(ALT_LOCAL, '', $plugin_path);
+		$plugin_path = alt_get_path() . '/translations';
+		load_plugin_textdomain(alt_get_local(), '', $plugin_path);
 	}
 	// tell WP that we are going to use new options
 	// also, register the admin CSS file for later inclusion
 	add_action('admin_init', 'ALT_options_init');
 	function ALT_options_init() {
-		register_setting(ALT_OPTIONS_NAME, ALT_OPTION, 'ALT_validation');
+		register_setting(ALT_OPTIONS_NAME, alt_get_option(), 'ALT_validation');
 		register_ALT_admin_style();
 	}
 	// validation function
 	function ALT_validation($input) {
 		// sanitize textarea
-		$input[ALT_DEFAULT_TEXT_NAME] = wp_kses_post(force_balance_tags($input[ALT_DEFAULT_TEXT_NAME]));
+		$input[ALT_DEFAULT_TEXT_NAME] = wp_kses_data(force_balance_tags($input[ALT_DEFAULT_TEXT_NAME]));
 		return $input;
 	} 
 
 	// add Settings sub-menu
 	add_action('admin_menu', 'ALT_plugin_menu');
 	function ALT_plugin_menu() {
-		add_options_page(ALT_PLUGIN_NAME, ALT_PLUGIN_NAME, ALT_PERMISSIONS_LEVEL, ALT_SLUG, 'ALT_page');
+		add_options_page(ALT_PLUGIN_NAME, ALT_PLUGIN_NAME, ALT_PERMISSIONS_LEVEL, alt_get_slug(), 'ALT_page');
 	}
 	// plugin settings page
 	// http://planetozh.com/blog/2009/05/handling-plugins-options-in-wordpress-28-with-register_setting/
 	function ALT_page() {
 		// check perms
 		if (!current_user_can(ALT_PERMISSIONS_LEVEL)) {
-			wp_die(__('You do not have sufficient permission to access this page', ALT_LOCAL));
+			wp_die(__('You do not have sufficient permission to access this page', alt_get_local()));
 		}
 		?>
 		<div class="wrap">
-			<h2 id="plugintitle"><img src="<?php echo plugins_url(plugin_basename(dirname(__FILE__) . '/images/login.png')) ?>" title="" alt="" height="64" width="64" align="absmiddle" /> <?php echo ALT_PLUGIN_NAME; _e(' by ', ALT_LOCAL); ?><a href="http://www.jimmyscode.com/">Jimmy Pe&ntilde;a</a></h2>
-			<div><?php _e('You are running plugin version', ALT_LOCAL); ?> <strong><?php echo ALT_VERSION; ?></strong>.</div>
+			<h2 id="plugintitle"><img src="<?php echo plugins_url(alt_get_path() . '/images/login.png'); ?>" title="" alt="" height="64" width="64" align="absmiddle" /> <?php echo ALT_PLUGIN_NAME; _e(' by ', alt_get_local()); ?><a href="http://www.jimmyscode.com/">Jimmy Pe&ntilde;a</a></h2>
+			<div><?php _e('You are running plugin version', alt_get_local()); ?> <strong><?php echo ALT_VERSION; ?></strong>.</div>
+
+			<?php /* http://code.tutsplus.com/tutorials/the-complete-guide-to-the-wordpress-settings-api-part-5-tabbed-navigation-for-your-settings-page--wp-24971 */ ?>
+			<?php $active_tab = (isset($_GET['tab']) ? $_GET['tab'] : 'settings'); ?>
+			<h2 class="nav-tab-wrapper">
+			  <a href="?page=<?php echo alt_get_slug(); ?>&tab=settings" class="nav-tab <?php echo $active_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php _e('Settings', alt_get_local()); ?></a>
+				<a href="?page=<?php echo alt_get_slug(); ?>&tab=support" class="nav-tab <?php echo $active_tab == 'support' ? 'nav-tab-active' : ''; ?>"><?php _e('Support', alt_get_local()); ?></a>
+			</h2>
+
 			<form method="post" action="options.php">
-			<?php settings_fields(ALT_OPTIONS_NAME); ?>
-			<?php $options = alt_getpluginoptions(); ?>
-			<?php update_option(ALT_OPTION, $options); ?>
-			<h3 id="settings"><img src="<?php echo plugins_url(plugin_basename(dirname(__FILE__) . '/images/settings.png')) ?>" title="" alt="" height="61" width="64" align="absmiddle" /> <?php _e('Plugin Settings', ALT_LOCAL); ?></h3>
-				<?php submit_button(); ?>
-
-				<table class="form-table" id="theme-options-wrap">
-					<tr valign="top"><th scope="row"><strong><label title="<?php _e('Is plugin enabled? Uncheck this to turn it off temporarily.', ALT_LOCAL); ?>" for="<?php echo ALT_OPTION; ?>[<?php echo ALT_DEFAULT_ENABLED_NAME; ?>]"><?php _e('Plugin enabled?', ALT_LOCAL); ?></label></strong></th>
-						<td><input type="checkbox" id="<?php echo ALT_OPTION; ?>[<?php echo ALT_DEFAULT_ENABLED_NAME; ?>]" name="<?php echo ALT_OPTION; ?>[<?php echo ALT_DEFAULT_ENABLED_NAME; ?>]" value="1" <?php checked('1', $options[ALT_DEFAULT_ENABLED_NAME]); ?> /></td>
-					</tr>
-					<tr valign="top"><td colspan="2"><?php _e('Is plugin enabled? Uncheck this to turn it off temporarily.', ALT_LOCAL); ?></td></tr>
-					
-					<tr valign="top"><th scope="row"><strong><label title="<?php _e('Enter custom login text', ALT_LOCAL); ?>" for="<?php echo ALT_OPTION; ?>[<?php echo ALT_DEFAULT_TEXT_NAME; ?>]"><?php _e('Enter custom login text', ALT_LOCAL); ?></label></strong></th>
-						<td><textarea rows="12" cols="75" id="<?php echo ALT_OPTION; ?>[<?php echo ALT_DEFAULT_TEXT_NAME; ?>]" name="<?php echo ALT_OPTION; ?>[<?php echo ALT_DEFAULT_TEXT_NAME; ?>]"><?php echo $options[ALT_DEFAULT_TEXT_NAME]; ?></textarea></td>
-					</tr>
-					<tr valign="top"><td colspan="2"><?php _e('Type the custom text you want to display on the admin login screen. HTML allowed.', ALT_LOCAL); ?></td></tr>
-				</table>
-
-				<?php submit_button(); ?>
+				<?php settings_fields(ALT_OPTIONS_NAME); ?>
+				<?php $options = alt_getpluginoptions(); ?>
+				<?php update_option(alt_get_option(), $options); ?>
+				<?php if ($active_tab == 'settings') { ?>
+					<h3 id="settings"><img src="<?php echo plugins_url(alt_get_path() . '/images/settings.png'); ?>" title="" alt="" height="61" width="64" align="absmiddle" /> <?php _e('Plugin Settings', alt_get_local()); ?></h3>
+					<table class="form-table" id="theme-options-wrap">
+						<tr valign="top"><th scope="row"><strong><label title="<?php _e('Is plugin enabled? Uncheck this to turn it off temporarily.', alt_get_local()); ?>" for="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_ENABLED_NAME; ?>]"><?php _e('Plugin enabled?', alt_get_local()); ?></label></strong></th>
+							<td><input type="checkbox" id="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_ENABLED_NAME; ?>]" name="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_ENABLED_NAME; ?>]" value="1" <?php checked('1', $options[ALT_DEFAULT_ENABLED_NAME]); ?> /></td>
+						</tr>
+						<tr valign="top"><td colspan="2"><?php _e('Is plugin enabled? Uncheck this to turn it off temporarily.', alt_get_local()); ?></td></tr>
+						<tr valign="top"><th scope="row"><strong><label title="<?php _e('Enter custom login text', alt_get_local()); ?>" for="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_TEXT_NAME; ?>]"><?php _e('Enter custom login text', alt_get_local()); ?></label></strong></th>
+							<td><textarea rows="12" cols="75" id="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_TEXT_NAME; ?>]" name="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_TEXT_NAME; ?>]"><?php echo $options[ALT_DEFAULT_TEXT_NAME]; ?></textarea></td>
+						</tr>
+						<tr valign="top"><td colspan="2"><?php _e('Type the custom text you want to display on the admin login screen. HTML allowed.', alt_get_local()); ?></td></tr>
+					</table>
+					<?php submit_button(); ?>
+				<?php } else { ?>
+					<h3 id="support"><img src="<?php echo plugins_url(alt_get_path() . '/images/support.png'); ?>" title="" alt="" height="64" width="64" align="absmiddle" /> <?php _e('Support', alt_get_local()); ?></h3>
+					<div class="support">
+						<?php echo alt_getsupportinfo(alt_get_slug(), alt_get_local()); ?>
+					</div>
+				<?php } ?>
 			</form>
-			<hr />
-			<h3 id="support"><img src="<?php echo plugins_url(plugin_basename(dirname(__FILE__) . '/images/support.png')) ?>" title="" alt="" height="64" width="64" align="absmiddle" /> Support</h3>
-				<div class="support">
-				<?php echo '<a href="http://wordpress.org/extend/plugins/' . ALT_SLUG . '/">' . __('Documentation', ALT_LOCAL) . '</a> | ';
-					echo '<a href="http://wordpress.org/plugins/' . ALT_SLUG . '/faq/">' . __('FAQ', ALT_LOCAL) . '</a><br />';
-					_e('If you like this plugin, please ', ALT_LOCAL);
-					echo '<a href="http://wordpress.org/support/view/plugin-reviews/' . ALT_SLUG . '/">';
-					_e('rate it on WordPress.org', ALT_LOCAL);
-					echo '</a> ';
-					_e('and click the ', ALT_LOCAL);
-					echo '<a href="http://wordpress.org/plugins/' . ALT_SLUG .  '/#compatibility">';
-					_e('Works', ALT_LOCAL);
-					echo '</a> ';
-					_e('button. For support please visit the ', ALT_LOCAL);
-					echo '<a href="http://wordpress.org/support/plugin/' . ALT_SLUG . '">';
-					_e('forums', ALT_LOCAL);
-					echo '</a>.';
-				?>
-				<br /><br />
-				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7EX9NB9TLFHVW"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="Donate with PayPal" title="Donate with PayPal" width="92" height="26" /></a>
-				</div>
 		</div>
 		<?php }
 
@@ -120,7 +105,7 @@ License: GPLv2 or later
 	add_filter('login_message', 'alt_login_message');
 	function alt_login_message($default) {
 		$options = alt_getpluginoptions();
-		$enabled = $options[ALT_DEFAULT_ENABLED_NAME];
+		$enabled = (bool)$options[ALT_DEFAULT_ENABLED_NAME];
 		if ($enabled) {
 			$tta = $options[ALT_DEFAULT_TEXT_NAME];
 			if ($tta !== ALT_DEFAULT_TEXT) {
@@ -140,12 +125,12 @@ License: GPLv2 or later
 		global $pagenow;
 		if (current_user_can(ALT_PERMISSIONS_LEVEL)) { // user has privilege
 			if ($pagenow == 'options-general.php') { // we are on Settings menu
-				if ($_GET['page'] == ALT_SLUG) { // we are on this plugin's settings page
+				if ($_GET['page'] == alt_get_slug()) { // we are on this plugin's settings page
 					$options = alt_getpluginoptions();
 					if ($options != false) {
-						$enabled = $options[ALT_DEFAULT_ENABLED_NAME];
+						$enabled = (bool)$options[ALT_DEFAULT_ENABLED_NAME];
 						if (!$enabled) {
-							echo '<div id="message" class="error">' . ALT_PLUGIN_NAME . ' ' . __('is currently disabled.', ALT_LOCAL) . '</div>';
+							echo '<div id="message" class="error">' . ALT_PLUGIN_NAME . ' ' . __('is currently disabled.', alt_get_local()) . '</div>';
 						}
 					}
 				}
@@ -158,34 +143,31 @@ License: GPLv2 or later
 		global $pagenow;
 		if (current_user_can(ALT_PERMISSIONS_LEVEL)) { // user has privilege
 			if ($pagenow == 'options-general.php') { // we are on Settings menu
-				if ($_GET['page'] == ALT_SLUG) { // we are on this plugin's settings page
+				if ($_GET['page'] == alt_get_slug()) { // we are on this plugin's settings page
 					alt_admin_styles();
 				}
 			}
 		}
 	}
-	// add settings link on plugin page
+	// add helpful links to plugin page next to plugin name
 	// http://bavotasan.com/2009/a-settings-link-for-your-wordpress-plugins/
-	add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'alt_plugin_settings_link');
-	function alt_plugin_settings_link($links) {
-		$settings_link = '<a href="options-general.php?page=' . ALT_SLUG . '">' . __('Settings', ALT_LOCAL) . '</a>';
-		array_unshift($links, $settings_link);
-		return $links;
-	}
 	// http://wpengineer.com/1295/meta-links-for-wordpress-plugins/
+	add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'alt_plugin_settings_link');
 	add_filter('plugin_row_meta', 'alt_meta_links', 10, 2);
+	
+	function alt_plugin_settings_link($links) {
+		return alt_settingslink($links, alt_get_slug(), alt_get_local());
+	}
 	function alt_meta_links($links, $file) {
-		$plugin = plugin_basename(__FILE__);
-		// create link
-		if ($file == $plugin) {
+		if ($file == plugin_basename(__FILE__)) {
 			$links = array_merge($links,
-				array(
-					'<a href="http://wordpress.org/support/plugin/' . ALT_SLUG . '">' . __('Support', ALT_LOCAL) . '</a>',
-					'<a href="http://wordpress.org/extend/plugins/' . ALT_SLUG . '/">' . __('Documentation', ALT_LOCAL) . '</a>',
-					'<a href="http://wordpress.org/plugins/' . ALT_SLUG . '/faq/">' . __('FAQ', ALT_LOCAL) . '</a>'
+			array(
+				sprintf(__('<a href="http://wordpress.org/support/plugin/%s">Support</a>', alt_get_local()), alt_get_slug()),
+				sprintf(__('<a href="http://wordpress.org/extend/plugins/%s/">Documentation</a>', alt_get_local()), alt_get_slug()),
+				sprintf(__('<a href="http://wordpress.org/plugins/%s/faq/">FAQ</a>', alt_get_local()), alt_get_slug())
 			));
 		}
-		return $links;
+		return $links;	
 	}
 	// enqueue/register the admin CSS file
 	function alt_admin_styles() {
@@ -193,7 +175,7 @@ License: GPLv2 or later
 	}
 	function register_alt_admin_style() {
 		wp_register_style('alt_admin_style',
-			plugins_url(ALT_PATH . '/css/admin.css'),
+			plugins_url(alt_get_path() . '/css/admin.css'),
 			array(),
 			ALT_VERSION . "_" . date('njYHis', filemtime(dirname(__FILE__) . '/css/admin.css')),
 			'all');
@@ -202,15 +184,45 @@ License: GPLv2 or later
 	register_activation_hook(__FILE__, 'alt_activate');
 	function alt_activate() {
 		$options = alt_getpluginoptions();
-		update_option(ALT_OPTION, $options);
+		update_option(alt_get_option(), $options);
+
+		// delete option when plugin is uninstalled
+		register_uninstall_hook(__FILE__, 'uninstall_ALT_plugin');
 	}
+	function uninstall_ALT_plugin() {
+		delete_option(alt_get_option());
+	}
+		
 	// generic function that returns plugin options from DB
 	// if option does not exist, returns plugin defaults
 	function alt_getpluginoptions() {
-		return get_option(ALT_OPTION, 
+		return get_option(alt_get_option(), 
 			array(
 				ALT_DEFAULT_ENABLED_NAME => ALT_DEFAULT_ENABLED, 
 				ALT_DEFAULT_TEXT_NAME => ALT_DEFAULT_TEXT
 			));
+	}
+
+	function alt_settingslink($linklist, $slugname = '', $localname = '') {
+		$settings_link = sprintf( __('<a href="options-general.php?page=%s">Settings</a>', $localname), $slugname);
+		array_unshift($linklist, $settings_link);
+		return $linklist;
+	}
+	// encapsulate these and call them throughout the plugin instead of hardcoding the constants everywhere
+	function alt_get_slug() { return ALT_SLUG; }
+	function alt_get_local() { return ALT_LOCAL; }
+	function alt_get_option() { return ALT_OPTION; }
+	function alt_get_path() { return ALT_PATH; }
+	
+	function alt_getsupportinfo($slugname = '', $localname = '') {
+		$output = sprintf( __('<a href="http://wordpress.org/extend/plugins/%s/">Documentation</a> | ', $localname), $slugname);
+		$output .= sprintf( __('<a href="http://wordpress.org/plugins/%s/faq/">FAQ</a><br />', $localname), $slugname);
+		$output .= sprintf( __('If you like this plugin, please <a href="http://wordpress.org/support/view/plugin-reviews/%s/">rate it on WordPress.org</a>', $localname), $slugname);
+		$output .= sprintf( __(' and click the <a href="http://wordpress.org/plugins/%s/#compatibility">Works</a> button. ', $localname), $slugname);
+		$output .= sprintf( __('For support please visit the <a href="http://wordpress.org/support/plugin/%s">forums</a>.', $localname), $slugname);
+		$output .= '<br /><br />';
+		$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7EX9NB9TLFHVW"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="Donate with PayPal" title="Donate with PayPal" width="92" height="26" /></a>';
+		$output .= '<br /><br />';
+		return $output;				
 	}
 ?>
