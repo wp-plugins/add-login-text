@@ -65,6 +65,9 @@ Add this to your functions.php:
 
 == Changelog ==
 
+= 0.0.5 = 
+- code fix
+
 = 0.0.4 =
 - code optimizations
 - plugin settings page is now tabbed
@@ -80,6 +83,9 @@ Add this to your functions.php:
 - verified compatibility with WP 3.9
 
 == Upgrade Notice ==
+
+= 0.0.5 = 
+- code fix
 
 = 0.0.4 =
 - code optimizations; plugin settings page is now tabbed

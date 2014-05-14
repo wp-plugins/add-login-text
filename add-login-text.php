@@ -3,7 +3,7 @@
 Plugin Name: Add Login Text
 Plugin URI: http://www.jimmyscode.com/wordpress/add-login-text/
 Description: Add text to the WordPress login screen.
-Version: 0.0.4
+Version: 0.0.5
 Author: Jimmy Pe&ntilde;a
 Author URI: http://www.jimmyscode.com/
 License: GPLv2 or later
@@ -11,7 +11,7 @@ License: GPLv2 or later
 
 	define('ALT_PLUGIN_NAME', 'Add Login Text');
 	// plugin constants
-	define('ALT_VERSION', '0.0.4');
+	define('ALT_VERSION', '0.0.5');
 	define('ALT_SLUG', 'add-login-text');
 	define('ALT_LOCAL', 'altlt');
 	define('ALT_OPTION', 'altlt');
@@ -46,7 +46,7 @@ License: GPLv2 or later
 	// validation function
 	function ALT_validation($input) {
 		// sanitize textarea
-		$input[ALT_DEFAULT_TEXT_NAME] = wp_kses_data(force_balance_tags($input[ALT_DEFAULT_TEXT_NAME]));
+		$input[ALT_DEFAULT_TEXT_NAME] = wp_kses_post(force_balance_tags($input[ALT_DEFAULT_TEXT_NAME]));
 		return $input;
 	} 
 
