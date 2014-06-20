@@ -3,7 +3,7 @@
 Plugin Name: Add Login Text
 Plugin URI: http://www.jimmyscode.com/wordpress/add-login-text/
 Description: Add text to the WordPress login screen.
-Version: 0.0.5
+Version: 0.0.6
 Author: Jimmy Pe&ntilde;a
 Author URI: http://www.jimmyscode.com/
 License: GPLv2 or later
@@ -11,7 +11,7 @@ License: GPLv2 or later
 
 	define('ALT_PLUGIN_NAME', 'Add Login Text');
 	// plugin constants
-	define('ALT_VERSION', '0.0.5');
+	define('ALT_VERSION', '0.0.6');
 	define('ALT_SLUG', 'add-login-text');
 	define('ALT_LOCAL', 'altlt');
 	define('ALT_OPTION', 'altlt');
@@ -46,7 +46,9 @@ License: GPLv2 or later
 	// validation function
 	function ALT_validation($input) {
 		// sanitize textarea
-		$input[ALT_DEFAULT_TEXT_NAME] = wp_kses_post(force_balance_tags($input[ALT_DEFAULT_TEXT_NAME]));
+		if (!empty($input)) {
+			$input[ALT_DEFAULT_TEXT_NAME] = wp_kses_post(force_balance_tags($input[ALT_DEFAULT_TEXT_NAME]));
+		}
 		return $input;
 	} 
 
@@ -68,7 +70,7 @@ License: GPLv2 or later
 			<div><?php _e('You are running plugin version', alt_get_local()); ?> <strong><?php echo ALT_VERSION; ?></strong>.</div>
 
 			<?php /* http://code.tutsplus.com/tutorials/the-complete-guide-to-the-wordpress-settings-api-part-5-tabbed-navigation-for-your-settings-page--wp-24971 */ ?>
-			<?php $active_tab = (isset($_GET['tab']) ? $_GET['tab'] : 'settings'); ?>
+			<?php $active_tab = (!empty($_GET['tab']) ? $_GET['tab'] : 'settings'); ?>
 			<h2 class="nav-tab-wrapper">
 			  <a href="?page=<?php echo alt_get_slug(); ?>&tab=settings" class="nav-tab <?php echo $active_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php _e('Settings', alt_get_local()); ?></a>
 				<a href="?page=<?php echo alt_get_slug(); ?>&tab=support" class="nav-tab <?php echo $active_tab == 'support' ? 'nav-tab-active' : ''; ?>"><?php _e('Support', alt_get_local()); ?></a>
@@ -105,9 +107,17 @@ License: GPLv2 or later
 	add_filter('login_message', 'alt_login_message');
 	function alt_login_message($default) {
 		$options = alt_getpluginoptions();
-		$enabled = (bool)$options[ALT_DEFAULT_ENABLED_NAME];
+		if (!empty($options)) {
+			$enabled = (bool)$options[ALT_DEFAULT_ENABLED_NAME];
+		} else {
+			$enabled = ALT_DEFAULT_ENABLED;
+		}
 		if ($enabled) {
-			$tta = $options[ALT_DEFAULT_TEXT_NAME];
+			if (!empty($options)) {
+				$tta = $options[ALT_DEFAULT_TEXT_NAME];
+			} else {
+				$tta = ALT_DEFAULT_TEXT;
+			}
 			if ($tta !== ALT_DEFAULT_TEXT) {
 				return '<div class="alt-login-text">' . $tta . '</div>';
 			} else { // plugin enabled but nothing entered?
@@ -125,12 +135,14 @@ License: GPLv2 or later
 		global $pagenow;
 		if (current_user_can(ALT_PERMISSIONS_LEVEL)) { // user has privilege
 			if ($pagenow == 'options-general.php') { // we are on Settings menu
-				if ($_GET['page'] == alt_get_slug()) { // we are on this plugin's settings page
-					$options = alt_getpluginoptions();
-					if ($options != false) {
-						$enabled = (bool)$options[ALT_DEFAULT_ENABLED_NAME];
-						if (!$enabled) {
-							echo '<div id="message" class="error">' . ALT_PLUGIN_NAME . ' ' . __('is currently disabled.', alt_get_local()) . '</div>';
+				if (!empty($_GET['page'])) {
+					if ($_GET['page'] == alt_get_slug()) { // we are on this plugin's settings page
+						$options = alt_getpluginoptions();
+						if (!empty($options)) {
+							$enabled = (bool)$options[ALT_DEFAULT_ENABLED_NAME];
+							if (!$enabled) {
+								echo '<div id="message" class="error">' . ALT_PLUGIN_NAME . ' ' . __('is currently disabled.', alt_get_local()) . '</div>';
+							}
 						}
 					}
 				}
@@ -143,8 +155,10 @@ License: GPLv2 or later
 		global $pagenow;
 		if (current_user_can(ALT_PERMISSIONS_LEVEL)) { // user has privilege
 			if ($pagenow == 'options-general.php') { // we are on Settings menu
-				if ($_GET['page'] == alt_get_slug()) { // we are on this plugin's settings page
-					alt_admin_styles();
+				if (!empty($_GET['page'])) {
+					if ($_GET['page'] == alt_get_slug()) { // we are on this plugin's settings page
+						alt_admin_styles();
+					}
 				}
 			}
 		}
