@@ -65,6 +65,10 @@ Add this to your functions.php:
 
 == Changelog ==
 
+= 0.0.7 =
+- permanent fix for Undefined Index issue
+- admin CSS and page updates
+
 = 0.0.6 =
 - code fix
 
@@ -87,6 +91,9 @@ Add this to your functions.php:
 - verified compatibility with WP 3.9
 
 == Upgrade Notice ==
+
+= 0.0.7 =
+- permanent fix for Undefined Index issue; admin CSS and page updates
 
 = 0.0.6 =
 - code fix

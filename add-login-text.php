@@ -3,7 +3,7 @@
 Plugin Name: Add Login Text
 Plugin URI: http://www.jimmyscode.com/wordpress/add-login-text/
 Description: Add text to the WordPress login screen.
-Version: 0.0.6
+Version: 0.0.7
 Author: Jimmy Pe&ntilde;a
 Author URI: http://www.jimmyscode.com/
 License: GPLv2 or later
@@ -11,7 +11,7 @@ License: GPLv2 or later
 
 	define('ALT_PLUGIN_NAME', 'Add Login Text');
 	// plugin constants
-	define('ALT_VERSION', '0.0.6');
+	define('ALT_VERSION', '0.0.7');
 	define('ALT_SLUG', 'add-login-text');
 	define('ALT_LOCAL', 'altlt');
 	define('ALT_OPTION', 'altlt');
@@ -31,35 +31,36 @@ License: GPLv2 or later
 	}
 
 	// localization to allow for translations
-	add_action('init', 'ALT_translation_file');
-	function ALT_translation_file() {
+	add_action('init', 'alt_translation_file');
+	function alt_translation_file() {
 		$plugin_path = alt_get_path() . '/translations';
 		load_plugin_textdomain(alt_get_local(), '', $plugin_path);
 	}
 	// tell WP that we are going to use new options
 	// also, register the admin CSS file for later inclusion
-	add_action('admin_init', 'ALT_options_init');
-	function ALT_options_init() {
-		register_setting(ALT_OPTIONS_NAME, alt_get_option(), 'ALT_validation');
-		register_ALT_admin_style();
+	add_action('admin_init', 'alt_options_init');
+	function alt_options_init() {
+		register_setting(ALT_OPTIONS_NAME, alt_get_option(), 'alt_validation');
+		register_alt_admin_style();
 	}
 	// validation function
-	function ALT_validation($input) {
-		// sanitize textarea
+	function alt_validation($input) {
+		// validate all form fields
 		if (!empty($input)) {
 			$input[ALT_DEFAULT_TEXT_NAME] = wp_kses_post(force_balance_tags($input[ALT_DEFAULT_TEXT_NAME]));
+			$input[ALT_DEFAULT_ENABLED_NAME] = (bool)$input[ALT_DEFAULT_ENABLED_NAME];
 		}
 		return $input;
 	} 
 
 	// add Settings sub-menu
-	add_action('admin_menu', 'ALT_plugin_menu');
-	function ALT_plugin_menu() {
-		add_options_page(ALT_PLUGIN_NAME, ALT_PLUGIN_NAME, ALT_PERMISSIONS_LEVEL, alt_get_slug(), 'ALT_page');
+	add_action('admin_menu', 'alt_plugin_menu');
+	function alt_plugin_menu() {
+		add_options_page(ALT_PLUGIN_NAME, ALT_PLUGIN_NAME, ALT_PERMISSIONS_LEVEL, alt_get_slug(), 'alt_page');
 	}
 	// plugin settings page
 	// http://planetozh.com/blog/2009/05/handling-plugins-options-in-wordpress-28-with-register_setting/
-	function ALT_page() {
+	function alt_page() {
 		// check perms
 		if (!current_user_can(ALT_PERMISSIONS_LEVEL)) {
 			wp_die(__('You do not have sufficient permission to access this page', alt_get_local()));
@@ -84,13 +85,14 @@ License: GPLv2 or later
 					<h3 id="settings"><img src="<?php echo plugins_url(alt_get_path() . '/images/settings.png'); ?>" title="" alt="" height="61" width="64" align="absmiddle" /> <?php _e('Plugin Settings', alt_get_local()); ?></h3>
 					<table class="form-table" id="theme-options-wrap">
 						<tr valign="top"><th scope="row"><strong><label title="<?php _e('Is plugin enabled? Uncheck this to turn it off temporarily.', alt_get_local()); ?>" for="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_ENABLED_NAME; ?>]"><?php _e('Plugin enabled?', alt_get_local()); ?></label></strong></th>
-							<td><input type="checkbox" id="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_ENABLED_NAME; ?>]" name="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_ENABLED_NAME; ?>]" value="1" <?php checked('1', $options[ALT_DEFAULT_ENABLED_NAME]); ?> /></td>
+							<td><input type="checkbox" id="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_ENABLED_NAME; ?>]" name="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_ENABLED_NAME; ?>]" value="1" <?php checked('1', alt_checkifset(ALT_DEFAULT_ENABLED_NAME, ALT_DEFAULT_ENABLED, $options)); ?> /></td>
 						</tr>
-						<tr valign="top"><td colspan="2"><?php _e('Is plugin enabled? Uncheck this to turn it off temporarily.', alt_get_local()); ?></td></tr>
+						<?php alt_explanationrow(__('Is plugin enabled? Uncheck this to turn it off temporarily.', alt_get_local())); ?>
+						<?php alt_getlinebreak(); ?>
 						<tr valign="top"><th scope="row"><strong><label title="<?php _e('Enter custom login text', alt_get_local()); ?>" for="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_TEXT_NAME; ?>]"><?php _e('Enter custom login text', alt_get_local()); ?></label></strong></th>
-							<td><textarea rows="12" cols="75" id="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_TEXT_NAME; ?>]" name="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_TEXT_NAME; ?>]"><?php echo $options[ALT_DEFAULT_TEXT_NAME]; ?></textarea></td>
+							<td><textarea rows="12" cols="75" id="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_TEXT_NAME; ?>]" name="<?php echo alt_get_option(); ?>[<?php echo ALT_DEFAULT_TEXT_NAME; ?>]"><?php echo alt_checkifset(ALT_DEFAULT_TEXT_NAME, ALT_DEFAULT_TEXT, $options); ?></textarea></td>
 						</tr>
-						<tr valign="top"><td colspan="2"><?php _e('Type the custom text you want to display on the admin login screen. HTML allowed.', alt_get_local()); ?></td></tr>
+						<?php alt_explanationrow(__('Type the custom text you want to display on the admin login screen. HTML allowed.', alt_get_local())); ?>
 					</table>
 					<?php submit_button(); ?>
 				<?php } else { ?>
@@ -201,9 +203,9 @@ License: GPLv2 or later
 		update_option(alt_get_option(), $options);
 
 		// delete option when plugin is uninstalled
-		register_uninstall_hook(__FILE__, 'uninstall_ALT_plugin');
+		register_uninstall_hook(__FILE__, 'uninstall_alt_plugin');
 	}
-	function uninstall_ALT_plugin() {
+	function uninstall_alt_plugin() {
 		delete_option(alt_get_option());
 	}
 		
@@ -246,5 +248,15 @@ License: GPLv2 or later
 		$output .= '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7EX9NB9TLFHVW"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="Donate with PayPal" title="Support this plugin" width="92" height="26" /></a>';
 		$output .= '<br /><br />';
 		return $output;
+	}
+	
+	function alt_checkifset($optionname, $optiondefault, $optionsarr) {
+		return (!empty($optionsarr[$optionname]) ? $optionsarr[$optionname] : $optiondefault);
+	}
+	function alt_getlinebreak() {
+	  echo '<tr valign="top"><td colspan="2"></td></tr>';
+	}
+	function alt_explanationrow($msg = '') {
+		echo '<tr valign="top"><td></td><td><em>' . $msg . '</em></td></tr>';
 	}
 ?>
