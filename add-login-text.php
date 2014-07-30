@@ -3,7 +3,7 @@
 Plugin Name: Add Login Text
 Plugin URI: http://www.jimmyscode.com/wordpress/add-login-text/
 Description: Add text to the WordPress login screen.
-Version: 0.0.7
+Version: 0.0.8
 Author: Jimmy Pe&ntilde;a
 Author URI: http://www.jimmyscode.com/
 License: GPLv2 or later
@@ -11,7 +11,7 @@ License: GPLv2 or later
 if (!defined('ALT_PLUGIN_NAME')) {
 	// plugin constants
 	define('ALT_PLUGIN_NAME', 'Add Login Text');
-	define('ALT_VERSION', '0.0.7');
+	define('ALT_VERSION', '0.0.8');
 	define('ALT_SLUG', 'add-login-text');
 	define('ALT_LOCAL', 'altlt');
 	define('ALT_OPTION', 'altlt');
@@ -51,7 +51,7 @@ function alt_validation($input) {
 		$input[ALT_DEFAULT_ENABLED_NAME] = (bool)$input[ALT_DEFAULT_ENABLED_NAME];
 	}
 	return $input;
-} 
+}
 // add Settings sub-menu
 add_action('admin_menu', 'alt_plugin_menu');
 function alt_plugin_menu() {
@@ -69,7 +69,7 @@ function alt_page() {
 		<h2 id="plugintitle"><img src="<?php echo alt_getimagefilename('login.png'); ?>" title="" alt="" height="64" width="64" align="absmiddle" /> <?php echo ALT_PLUGIN_NAME; _e(' by ', alt_get_local()); ?><a href="http://www.jimmyscode.com/">Jimmy Pe&ntilde;a</a></h2>
 		<div><?php _e('You are running plugin version', alt_get_local()); ?> <strong><?php echo ALT_VERSION; ?></strong>.</div>
 		<?php /* http://code.tutsplus.com/tutorials/the-complete-guide-to-the-wordpress-settings-api-part-5-tabbed-navigation-for-your-settings-page--wp-24971 */ ?>
-		<?php $active_tab = (!empty($_GET['tab']) ? $_GET['tab'] : 'settings'); ?>
+		<?php $active_tab = (isset($_GET['tab']) ? $_GET['tab'] : 'settings'); ?>
 		<h2 class="nav-tab-wrapper">
 		  <a href="?page=<?php echo alt_get_slug(); ?>&tab=settings" class="nav-tab <?php echo $active_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php _e('Settings', alt_get_local()); ?></a>
 			<a href="?page=<?php echo alt_get_slug(); ?>&tab=support" class="nav-tab <?php echo $active_tab == 'support' ? 'nav-tab-active' : ''; ?>"><?php _e('Support', alt_get_local()); ?></a>
@@ -133,7 +133,7 @@ function alt_showAdminMessages() {
 	global $pagenow;
 	if (current_user_can(ALT_PERMISSIONS_LEVEL)) { // user has privilege
 		if ($pagenow == 'options-general.php') { // we are on Settings menu
-			if (!empty($_GET['page'])) {
+			if (isset($_GET['page'])) {
 				if ($_GET['page'] == alt_get_slug()) { // we are on this plugin's settings page
 					$options = alt_getpluginoptions();
 					if (!empty($options)) {
@@ -153,7 +153,7 @@ function insert_alt_admin_css() {
 	global $pagenow;
 	if (current_user_can(ALT_PERMISSIONS_LEVEL)) { // user has privilege
 		if ($pagenow == 'options-general.php') { // we are on Settings menu
-			if (!empty($_GET['page'])) {
+			if (isset($_GET['page'])) {
 				if ($_GET['page'] == alt_get_slug()) { // we are on this plugin's settings page
 					alt_admin_styles();
 				}

@@ -65,6 +65,9 @@ Add this to your functions.php:
 
 == Changelog ==
 
+= 0.0.8 =
+- updated validation code
+
 = 0.0.7 =
 - permanent fix for Undefined Index issue
 - admin CSS and page updates
@@ -91,6 +94,9 @@ Add this to your functions.php:
 - verified compatibility with WP 3.9
 
 == Upgrade Notice ==
+
+= 0.0.8 =
+- fix for undefined index when form first loads
 
 = 0.0.7 =
 - permanent fix for Undefined Index issue; admin CSS and page updates
