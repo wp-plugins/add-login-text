@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Add Login Text package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Add Login Text 0.0.3\n"
+"Project-Id-Version: Add Login Text 0.0.8\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/add-login-text\n"
-"POT-Creation-Date: 2014-04-22 02:37:54+00:00\n"
+"POT-Creation-Date: 2014-08-14 16:33:31+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,82 +16,112 @@ msgstr ""
 msgid "Do not access this file directly."
 msgstr ""
 
-#: add-login-text.php:68
+#: add-login-text.php:65
 msgid "You do not have sufficient permission to access this page"
 msgstr ""
 
-#: add-login-text.php:72
+#: add-login-text.php:69
 msgid " by "
 msgstr ""
 
-#: add-login-text.php:73
+#: add-login-text.php:70
 msgid "You are running plugin version"
 msgstr ""
 
-#: add-login-text.php:78
-msgid "Plugin Settings"
+#: add-login-text.php:74
+msgid "Settings"
 msgstr ""
 
-#: add-login-text.php:82 add-login-text.php:85
-msgid "Is plugin enabled? Uncheck this to turn it off temporarily."
+#: add-login-text.php:75 add-login-text.php:96
+msgid "Support"
 msgstr ""
 
 #: add-login-text.php:82
+msgid "Plugin Settings"
+msgstr ""
+
+#: add-login-text.php:84 add-login-text.php:87
+msgid "Is plugin enabled? Uncheck this to turn it off temporarily."
+msgstr ""
+
+#: add-login-text.php:84
 msgid "Plugin enabled?"
 msgstr ""
 
-#: add-login-text.php:87
+#: add-login-text.php:89
 msgid "Enter custom login text"
 msgstr ""
 
-#: add-login-text.php:90
+#: add-login-text.php:92
 msgid ""
 "Type the custom text you want to display on the admin login screen. HTML "
 "allowed."
 msgstr ""
 
-#: add-login-text.php:98 add-login-text.php:184
-msgid "Documentation"
-msgstr ""
-
-#: add-login-text.php:99 add-login-text.php:185
-msgid "FAQ"
-msgstr ""
-
-#: add-login-text.php:100
-msgid "If you like this plugin, please "
-msgstr ""
-
-#: add-login-text.php:102
-msgid "rate it on WordPress.org"
-msgstr ""
-
-#: add-login-text.php:104
-msgid "and click the "
-msgstr ""
-
-#: add-login-text.php:106
-msgid "Works"
-msgstr ""
-
-#: add-login-text.php:108
-msgid "button. For support please visit the "
-msgstr ""
-
-#: add-login-text.php:110
-msgid "forums"
-msgstr ""
-
-#: add-login-text.php:148
+#: add-login-text.php:142
 msgid "is currently disabled."
 msgstr ""
 
-#: add-login-text.php:171
-msgid "Settings"
+#: add-login-text.php:177
+msgid "<a href=\"http://wordpress.org/support/plugin/%s\">Support</a>"
 msgstr ""
 
-#: add-login-text.php:183
-msgid "Support"
+#: add-login-text.php:178 add-login-text.php:229
+msgid "<a href=\"http://wordpress.org/extend/plugins/%s/\">Documentation</a>"
+msgstr ""
+
+#: add-login-text.php:179
+msgid "<a href=\"http://wordpress.org/plugins/%s/faq/\">FAQ</a>"
+msgstr ""
+
+#: add-login-text.php:216
+msgid "<a href=\"options-general.php?page=%s\">Settings</a>"
+msgstr ""
+
+#: add-login-text.php:227
+msgid "Do you need help with this plugin? Check out the following resources:"
+msgstr ""
+
+#: add-login-text.php:230
+msgid "<a href=\"http://wordpress.org/plugins/%s/faq/\">FAQ</a><br />"
+msgstr ""
+
+#: add-login-text.php:231
+msgid ""
+"<a href=\"http://wordpress.org/support/plugin/%s\">Support Forum</a><br />"
+msgstr ""
+
+#: add-login-text.php:232
+msgid ""
+"<a href=\"http://www.jimmyscode.com/wordpress/%s\">Plugin Homepage / Demo</"
+"a><br />"
+msgstr ""
+
+#: add-login-text.php:233
+msgid ""
+"<a href=\"http://wordpress.org/extend/plugins/%s/developers/\">Development</"
+"a><br />"
+msgstr ""
+
+#: add-login-text.php:234
+msgid ""
+"<a href=\"http://wordpress.org/plugins/%s/changelog/\">Changelog</a><br />"
+msgstr ""
+
+#: add-login-text.php:237
+msgid ""
+"If you like this plugin, please <a href=\"http://wordpress.org/support/view/"
+"plugin-reviews/%s/\">rate it on WordPress.org</a>"
+msgstr ""
+
+#: add-login-text.php:238
+msgid ""
+" and click the <a href=\"http://wordpress.org/plugins/%s/#compatibility"
+"\">Works</a> button. "
+msgstr ""
+
+#: add-login-text.php:240
+msgid "Your donations encourage further development and support. "
 msgstr ""
 
 #. Plugin Name of the plugin/theme
